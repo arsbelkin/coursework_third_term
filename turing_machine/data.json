@@ -1,0 +1,16 @@
+{
+    "alphabet": "01",
+    "word": "1011",
+    "start_condition": "q0",
+    "conditions": [
+        {
+            "condition": "q0",
+            "comment": "",
+            "commands": {
+                "0": "R",
+                "1": "R", 
+                "empty": "L q1"
+            }
+        }
+    ]
+}

@@ -2,6 +2,9 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,venv,visualstudio,visualstudiocode,git,pycharm
 
 
+#VS_CODE
+.vscode
+
 ### Linux ###
 *~
 
