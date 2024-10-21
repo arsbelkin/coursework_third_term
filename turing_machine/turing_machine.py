@@ -16,7 +16,7 @@ class DoubleLinkedList:
     def is_empty(self):
         return not self.__len
     
-    def push_front(self, value) -> None:
+    def push_front(self, value=None) -> None:
         node = self.Node(value=value)
         node.next = self.head
         if self.head is not None: self.head.prev = node
@@ -24,7 +24,7 @@ class DoubleLinkedList:
         self.head = node
         self.len += 1
     
-    def push_back(self, value) -> None:
+    def push_back(self, value=None) -> None:
         node = self.Node(value=value)
         node.prev = self.tail
         if self.head is None: self.head = node

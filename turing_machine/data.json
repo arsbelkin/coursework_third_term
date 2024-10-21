@@ -2,6 +2,7 @@
     "alphabet": "01",
     "word": "1011",
     "start_condition": "q0",
+    "start_pointer": 0,
     "conditions": [
         {
             "condition": "q0",
