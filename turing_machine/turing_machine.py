@@ -3,7 +3,7 @@ import json
 
 
 class TuringMachine:
-    def __init__(self, tape=DoubleLinkedList(), path_to_file="data.json") -> None:
+    def __init__(self, tape=DoubleLinkedList(), path_to_file="binary_sum.json") -> None:
         self.tape = tape  # лента
         self.data = self.__load_data(path_to_file)  # данные
         self.alphabet = self.data["alphabet"]  # алфавит
@@ -97,7 +97,7 @@ class TuringMachine:
         #print(self.tape.print_list())
 
 
-tm = TuringMachine()
+tm = TuringMachine(path_to_file="binary_sum.json")
 
 tm.run()
 tm.run()

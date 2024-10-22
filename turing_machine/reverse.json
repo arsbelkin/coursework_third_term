@@ -1,0 +1,17 @@
+{
+    "alphabet": "ab",
+    "word": "abaabbaaabbb",
+    "start_condition": "q0",
+    "start_pointer": 0,
+    "conditions": [
+        {
+            "condition": "q0",
+            "comment": "",
+            "commands": {
+                "a": "b R q0",
+                "b": "a R q0", 
+                "empty": "!"
+            }
+        }
+    ]
+}
