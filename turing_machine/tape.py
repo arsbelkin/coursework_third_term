@@ -6,7 +6,7 @@ class DoubleLinkedList:
             self.next = next
 
         def __str__(self) -> str:
-            return str(self.value)
+            return str(self.value) if self.value != "empty" else "_"
 
     def __init__(self) -> None:
         self.head = None
@@ -123,7 +123,7 @@ class DoubleLinkedList:
 
         while current_node:
             print(
-                current_node.value if current_node.value is not None else "_", end=" "
+                current_node.value if current_node.value != "empty" else "_", end=" "
             )
             current_node = current_node.next
         print()
@@ -133,7 +133,7 @@ class DoubleLinkedList:
         result = ""
         while current_node:
             result += (
-                current_node.value if current_node.value is not None else "_"
+                current_node.value if current_node.value != "empty" else "_"
             ) + " "
             current_node = current_node.next
         return result

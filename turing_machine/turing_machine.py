@@ -37,7 +37,7 @@ class TuringMachine:
     def print_tape(self):
         pos = str(self.tape).find(self.tape[self.pointer].value)
         self.tape.print_list()
-        print(" " * pos + "x")
+        print(" " * (self.pointer + self.pointer * len(str(self.tape[self.pointer]))) + "x")
 
     def next_step(self) -> None:
         condition = self.conditions[int(self.condition[1::])]
@@ -93,6 +93,7 @@ class TuringMachine:
     def run(self):
         flag = True
         while flag:
+            self.print_tape()
             flag = self.next_step()
         #print(self.tape.print_list())
 
@@ -100,28 +101,28 @@ class TuringMachine:
 tm = TuringMachine(path_to_file="binary_sum.json")
 
 tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
-tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
+# tm.run()
 
 # print(tm.pointer)
 # print(tm.condition)
