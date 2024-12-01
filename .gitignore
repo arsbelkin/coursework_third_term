@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,venv,visualstudio,visualstudiocode,git,pycharm
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,venv,visualstudio,visualstudiocode,git,pycharm
 
+#pycharm
+.idea/
 
 #VS_CODE
 .vscode
