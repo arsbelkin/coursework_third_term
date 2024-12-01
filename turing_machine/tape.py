@@ -1,3 +1,6 @@
+from typing import Union
+
+
 class DoubleLinkedList:
     class Node:
         def __init__(self, value=None, prev=None, next=None) -> None:
@@ -6,14 +9,14 @@ class DoubleLinkedList:
             self.next = next
 
         def __str__(self) -> str:
-            return str(self.value) if self.value != "empty" else "_"
+            return str(self.value)
 
     def __init__(self) -> None:
         self.head = None
         self.tail = None
         self.len = 0
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return not self.__len
 
     def push_front(self, value=None) -> None:
@@ -50,7 +53,7 @@ class DoubleLinkedList:
 
         return node
 
-    def pop_back(self) -> Node:
+    def pop_back(self) -> Union[Node, None]:
         if self.tail is None:
             return
 
@@ -96,7 +99,7 @@ class DoubleLinkedList:
 
         return node
 
-    def erase(self, index: int) -> Node:
+    def erase(self, index: int) -> Union[Node, None]:
         node = self.get_node(index)
         if node is None:
             return
@@ -133,7 +136,7 @@ class DoubleLinkedList:
         result = ""
         while current_node:
             result += (
-                current_node.value if current_node.value != "empty" else "_"
-            ) + " "
+                current_node.value
+            )
             current_node = current_node.next
         return result

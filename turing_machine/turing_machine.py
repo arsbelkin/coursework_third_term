@@ -3,64 +3,60 @@ import json
 
 
 class TuringMachine:
-    def __init__(self, tape=DoubleLinkedList(), path_to_file="binary_sum.json") -> None:
-        self.tape = tape  # лента
-        self.data = self.__load_data(path_to_file)  # данные
-        self.alphabet = self.data["alphabet"]  # алфавит
-        self.word = self.data["word"]  # слово
+    def __init__(self, tape=DoubleLinkedList, path_to_file=None) -> None:
+        self.tape = tape() # лента
+        self.data = self.__load_data(path_to_file) if path_to_file is not None else dict()# данные
+        self.alphabet = self.data["alphabet"] if path_to_file is not None else None # алфавит
+        self.word = self.data["word"] if path_to_file is not None else None # слово
         self.condition = self.data[
             "start_condition"
-        ]  # состояние(при инициализации стартовое состояние)
+        ] if path_to_file is not None else None # состояние(при инициализации стартовое состояние)
         self.pointer = self.data[
             "start_pointer"
-        ]  # позиция курсора(при инициализации стартовое положение)
-        self.conditions = self.data["conditions"]  # массив состояний и инструкций
+        ] if path_to_file is not None else None # позиция курсора(при инициализации стартовое положение)
+        self.conditions = self.data["conditions"] if path_to_file is not None else None # массив состояний и инструкций
 
-        self.__set_word(self.word)  # запись слова в ленту
-
-        # TODO: удалить
-        self.__min = 0
-        self.__max = len(self.word)
+        if path_to_file is not None:
+            self.__set_word(self.word)  # запись слова в ленту
 
     def __load_data(self, path_to_file) -> dict:
-        "функция для загрузки данных из файла"
+        """Загрузка данных из JSON-файла."""
         with open(path_to_file) as file:
             data = json.load(file)
+        data["path_to_file"] = path_to_file  # Сохраняем путь к файлу
         return data
 
+    def get_states(self):
+        if self.condition is not None:
+            return [state["condition"] for state in self.conditions]
+        else:
+            return ""
+    
+    def get_alphabet(self):
+        return self.alphabet if self.alphabet is not None else ""
+
     def __set_word(self, word) -> None:
-        # self.tape.push_front()
         for elem in word:
             self.tape.push_back(elem)
-        # self.tape.push_back()
 
-    def print_tape(self):
-        pos = str(self.tape).find(self.tape[self.pointer].value)
-        self.tape.print_list()
-        print(" " * (self.pointer + self.pointer * len(str(self.tape[self.pointer]))) + "x")
-
-    def next_step(self) -> None:
+    def step(self) -> bool:
         condition = self.conditions[int(self.condition[1::])]
-        # symbol = (
-        #     self.tape[self.pointer].value if 0 <= self.pointer < len(self.word) else "empty"
-        # )
         symbol = self.tape[self.pointer].value
         command = condition["commands"][symbol].split()
 
         if len(command) == 1:
             if command[0] == "!":
-                self.tape.print_list()
                 return False
             else:
                 if command[0] == "L":
                     self.pointer -= 1
                     if self.pointer < 0:
-                        self.tape.push_front("empty")
+                        self.tape.push_front("_")
                         self.pointer = 0
                 elif command[0] == "R":
                     self.pointer += 1
                     if self.pointer > self.tape.len - 1:
-                        self.tape.push_back("empty")
+                        self.tape.push_back("_")
                         self.pointer -= 1
         else:
             new_symbol, new_pointer, new_condition = command
@@ -71,12 +67,12 @@ class TuringMachine:
             if new_pointer == "L":
                 self.pointer -= 1
                 if self.pointer < 0:
-                    self.tape.push_front("empty")
+                    self.tape.push_front("_")
                     self.pointer = 0
             elif new_pointer == "R":
                 self.pointer += 1
                 if self.pointer > self.tape.len - 1:
-                    self.tape.push_back("empty")
+                    self.tape.push_back("_")
                     self.pointer -= 1
 
             if new_condition != "!":
@@ -85,7 +81,6 @@ class TuringMachine:
                 self.condition = self.data[
             "start_condition"
         ] 
-                self.tape.print_list()
                 return False
         
         return True
@@ -93,104 +88,4 @@ class TuringMachine:
     def run(self):
         flag = True
         while flag:
-            self.print_tape()
-            flag = self.next_step()
-        #print(self.tape.print_list())
-
-
-tm = TuringMachine(path_to_file="binary_sum.json")
-
-tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-# tm.run()
-
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
-
-# tm.next_step()
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
-
-# tm.next_step()
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
-
-# tm.next_step()
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
-
-# tm.next_step()
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
-
-# tm.next_step()
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
-
-# tm.next_step()
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
-
-# tm.next_step()
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
-
-# tm.next_step()
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
-
-# tm.next_step()
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
-
-# tm.next_step()
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
-
-# tm.next_step()
-# print(tm.pointer)
-# print(tm.condition)
-# # tm.print_tape()
-# tm.tape.print_list()
+            flag = self.step()

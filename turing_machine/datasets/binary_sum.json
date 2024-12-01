@@ -8,9 +8,9 @@
             "condition": "q0",
             "comment": "",
             "commands": {
-                "0": "R",
-                "1": "R", 
-                "empty": "_ L q1"
+                "0": "0 R q0",
+                "1": "1 R q0", 
+                "_": "_ L q1"
             }
         },
         {
@@ -19,16 +19,16 @@
             "commands": {
                 "0": "1 N q2",
                 "1": "0 L q1", 
-                "empty": "1 N !"
+                "_": "1 N !"
             }
         },
         {
             "condition": "q2",
             "comment": "",
             "commands": {
-                "0": "L",
-                "1": "L", 
-                "empty": "_ R !"
+                "0": "0 L q2",
+                "1": "1 L q2", 
+                "_": "_ R !"
             }
         }
     ]

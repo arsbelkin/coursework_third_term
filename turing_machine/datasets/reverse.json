@@ -10,7 +10,16 @@
             "commands": {
                 "a": "b R q0",
                 "b": "a R q0", 
-                "empty": "!"
+                "_": "_ L q1"
+            }
+        },
+        {
+            "condition": "q1",
+            "comment": "",
+            "commands": {
+                "a": "a L q1",
+                "b": "b L q1", 
+                "_": "_ R !"
             }
         }
     ]
