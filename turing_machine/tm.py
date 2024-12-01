@@ -60,8 +60,8 @@ class TuringMachineGUI:
     def open_settings(self):
         """Открывает окно настроек."""
         if not self.tm:
-            messagebox.showwarning("Ошибка", "Сначала загрузите или создайте машину.")
-            return
+            self.tm = TuringMachine()
+
 
         settings_window = tk.Toplevel(self.master)
         settings_window.title("Настройки машины Тьюринга")
@@ -76,7 +76,7 @@ class TuringMachineGUI:
         tk.Label(alphabet_tab, text="Введите символы алфавита через запятую:").pack(pady=10)
         alphabet_entry = tk.Entry(alphabet_tab, width=50)
         alphabet_entry.pack(pady=5)
-        alphabet_entry.insert(0, ",".join(self.tm.get_alphabet()))
+        alphabet_entry.insert(0, ",".join(self.tm.alphabet))
 
         def save_alphabet():
             new_alphabet = alphabet_entry.get().split(",")
@@ -129,20 +129,14 @@ class TuringMachineGUI:
         start_state_entry.pack(pady=5)
         start_state_entry.insert(0, self.tm.data.get("start_condition", ""))
 
-        tk.Label(states_tab, text="Финальные состояния через запятую:").pack(pady=10)
-        final_states_entry = tk.Entry(states_tab, width=50)
-        final_states_entry.pack(pady=5)
-        ##final_states_entry.insert(0, ",".join(self.tm.final_states))
 
         def save_states():
             new_states = states_entry.get().split(",")
             new_start_state = start_state_entry.get().strip()
-            new_final_states = final_states_entry.get().split(",")
 
             if new_states and new_start_state:
                 self.tm.states = [s.strip() for s in new_states if s.strip()]
                 self.tm.condition = new_start_state
-                self.tm.final_states = {s.strip() for s in new_final_states if s.strip()}
                 messagebox.showinfo("Успех", "Состояния обновлены!")
 
         tk.Button(states_tab, text="Сохранить", command=save_states).pack(pady=10)
@@ -155,19 +149,16 @@ class TuringMachineGUI:
         rules_text = tk.Text(rules_tab, height=10, width=60)
         rules_text.pack(pady=5)
 
-        # Отображаем текущие правила
-        # rules_display = "\n".join(
-        #     f"{state}, {symbol} -> {new_state}, {new_symbol}, {direction}"
-        #     for (state, symbol), (new_state, new_symbol, direction) in self.tm.transition_function.items()
-        # )
-        # rules_text.insert(1.0, rules_display)
+        #Отображаем текущие правила
+        rules_text.insert(1.0, self.tm.get_rules())
 
+        #TODO: добавить сохранение
         def save_rules():
             new_rules = rules_text.get(1.0, tk.END).strip()
             try:
                 self.tm.transition_function.clear()
                 for line in new_rules.split("\n"):
-                    parts = line.split("->")
+                    parts = line.split(":")
                     key = tuple(map(str.strip, parts[0].split(",")))
                     value = tuple(map(str.strip, parts[1].split(",")))
                     self.tm.transition_function[key] = value

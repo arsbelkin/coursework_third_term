@@ -10,6 +10,7 @@ class TuringMachine:
         self.alphabet = ""
         self.word = ""
         self.rules = None
+        self.states = set()
         self.currentCondition = None
         self.pointer = None
 
@@ -27,6 +28,7 @@ class TuringMachine:
             self.alphabet = self.data["alphabet"]
             self.word = self.data["word"]
             self.rules = self.data["conditions"]
+            self.states = self.get_states()
             self.currentCondition = self.data["start_condition"]
             self.pointer = self.data["start_pointer"]
     
@@ -34,6 +36,22 @@ class TuringMachine:
         if len(self.word):
             for char in self.word:
                 self.tape.push_back(char)
+
+    def get_rules(self)->str:
+        rules = ""
+        if self.rules is not None:
+            for cond in self.rules:
+                rules += f"{cond["condition"]}, "
+                for key, value in cond["commands"].items():
+                    rules += f"{key}: "
+                    rules += f"{value}\n"
+        return rules
+
+    def get_states(self)->set:
+        if self.rules is not None:
+            return (cond.get("condition", "") for cond in self.rules)
+        else:
+            return self.states
     
     def step(self)->bool:
         self.currentCondition = self.rules[int(self.currentCondition[1::])]
