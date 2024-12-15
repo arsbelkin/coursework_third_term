@@ -125,9 +125,7 @@ class DoubleLinkedList:
         current_node = self.head
 
         while current_node:
-            print(
-                current_node.value if current_node.value != "empty" else "_", end=" "
-            )
+            print(current_node.value if current_node.value != "empty" else "_", end=" ")
             current_node = current_node.next
         print()
 
@@ -135,8 +133,6 @@ class DoubleLinkedList:
         current_node = self.head
         result = ""
         while current_node:
-            result += (
-                current_node.value
-            )
+            result += current_node.value
             current_node = current_node.next
         return result

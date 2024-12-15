@@ -1,0 +1,1 @@
+{"alphabet": "01", "word":"1011000", "start_pointer": 0, "start_condition": "q0", "conditions": {"q0": {"condition": "q0", "commands": {"0": "_ R q1", "1": "_ R q2"}}, "q1": {"condition": "q1", "commands": {"_": "0 N !", "0": "0 R q1", "1": "1 R q1"}}, "q2": {"condition": "q2", "commands": {"_": "1 N !", "0": "0 R q2", "1": "1 R q2"}}}}
