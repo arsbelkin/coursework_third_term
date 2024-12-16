@@ -1,0 +1,264 @@
+
+\section*{Введение}
+\addcontentsline{toc}{section}{Введение}
+\thispagestyle{plain}
+
+Машина Тьюринга является одной из основополагающих концепций в теории вычислений, предложенной Аланом Тьюрингом в 1936 году. Она служит абстрактной моделью вычислений и позволяет исследовать границы того, что может быть вычислено.
+
+Понимание принципов машины Тьюринга помогает глубже осознать работу алгоритмов.
+
+\newpage
+
+\section{Формулирование проблемы и возможного её решения}
+\thispagestyle{plain}
+\subsection{\textbf{Задача}}
+
+Задача звучит так: реализовать машину Тьюринга с графическим интерфейсом, которая состоит из:
+
+\begin{itemize}[noitemsep,nolistsep]
+    \item   бесконечной в обе стороны ленты;
+    \item   головки записи-чтения;
+    \item   алфавита;
+    \item   таблицы состояний.
+\end{itemize}
+
+В программе должна быть возможность загружать из файла и сохранять в файл.
+
+\subsection{\textbf{План решения поставленной проблемы}}
+
+Первым делом надо разобраться с основными возможностями машины Тьюринга, эти знания были получены на занятиях по данной дисциплине.
+
+Хранение данных будет в файлах формата .json. А графический интерфейс будет выполнен с помощью библиотеки tkinter\cite{tkinter} языка Python\cite{python}.
+
+Создание бесконечной в обе стороны ленты - самый интересный вопрос. Я решил использовать такую структуру данных, как двусвязный список (DoubleLinkedList)\cite{dll}. Именно на этой структуре данных основывается моя реализация машины Тьюринга.
+
+После выбора "основы" машины, можно составить план реализации:
+
+\begin{enumerate}[label=\arabic*., noitemsep,nolistsep]
+    \item Определение формата состояний и правил;
+    \item Определение формата данных, сохраненных в файл;
+    \item Написание ленты на основе класса DoubleLinkedList;
+    \item Добавление ленты в класс TuringMachine;
+    \item Реализация взаимодействия ленты, алфавита, состояний и правил;
+    \item Создание графического интерфейса.
+\end{enumerate}
+
+
+
+\section{Программная реализация алгоритма}
+
+\subsection{\textbf{Использованные библиотеки}}
+При создании кода я буду использовать следующие библиотеки: tkinter для графического интерфейса, json для работы с json файлами и typing для указания типов переменных в функциях.
+
+\subsection{\textbf{Описание кода}}
+
+\subsubsection{Лента}
+
+Лента будет представлена двусвязным списком (DoubleLinkedList), в нем будет подкласс Node, то есть узел - ячейка на ленте, который будет иметь "магический" метод "str", который отвечает за представление ячейки.
+
+\begin{lstlisting}
+class DoubleLinkedList:
+    class Node:
+        def __init__(self, value=None, prev=None, next=None) -> None:
+            self.value = value
+            self.prev = prev
+            self.next = next
+
+        def __str__(self) -> str:
+            return str(self.value)
+
+    def __init__(self) -> None:
+        self.head = None
+        self.tail = None
+        self.len = 0
+\end{lstlisting}
+
+Далее будут приведены основные методы, которые используется в реализации машины Тьюринга:
+
+\textit{Добавление в начало и конец списка}. Эти методы помогают добавить слово на ленту, а так же добавлять символы при выходе за границы текущего слова:
+
+\begin{lstlisting}
+def push_front(self, value=None) -> None:
+    node = self.Node(value=value)
+    node.next = self.head
+    if self.head is not None:
+        self.head.prev = node
+    if self.tail is None:
+        self.tail = node
+    self.head = node
+    self.len += 1
+
+def push_back(self, value=None) -> None:
+    node = self.Node(value=value)
+    node.prev = self.tail
+    if self.head is None:
+        self.head = node
+    if self.tail is not None:
+        self.tail.next = node
+    self.tail = node
+    self.len += 1
+\end{lstlisting}
+
+
+\textit{Получение какого-либо узла списка}. Необходимость данного метода объяснять не приходится, так как получить какой-либо узел требуется очень часто:
+
+\begin{lstlisting}
+def get_node(self, index: int) -> Node:
+    node = self.head
+    n = 0
+
+    while n != index:
+        if node is None:
+            return node
+        node = node.next
+        n += 1
+
+    return node
+
+def __getitem__(self, index: int) -> Node:
+    return self.get_node(index)
+\end{lstlisting}
+
+
+\textit{Очищение списка}. Очистить сразу весь список нужно в ситуации, когда пользователь загружает новую конфигурацию или просто нажимает кнопку сброса:
+
+\begin{lstlisting}
+def clear(self) -> None:
+    while self.head is not None:
+        self.pop_front()
+\end{lstlisting}
+
+
+\subsubsection{класс TuringMachine}
+
+Класс TuringMachine содержит функции, представляющие машину Тьюринга без графического интерфейса.
+
+\textit{Конструктор класса}. В нем создаются все необходимые поля для работы машины Тьюринга. И загружается слово на ленту:
+
+\begin{lstlisting}
+class TuringMachine:
+    def __init__(self, path_to_file=None):
+        self.tape = DoubleLinkedList()
+        self.data = dict()
+        self.path_to_file = path_to_file
+        self.alphabet = ""
+        self.word = ""
+        self.rules = dict()
+        self.states = set()
+        self.currentCondition = None
+        self.pointer = None
+
+        self.__load_data(path_to_file=path_to_file)
+        self.__set_data()
+        self.__set_word()
+\end{lstlisting}
+
+\textit{Установка слова на ленту}:
+
+\begin{lstlisting}
+def __set_word(self) -> None:
+    if len(self.word):
+        for char in self.word:
+            self.tape.push_back(char)
+\end{lstlisting}
+
+\textit{Получение данных из файла}. Полученные данные записываются в атрибут класса: словарь data:
+
+\begin{lstlisting}
+def __load_data(self, path_to_file) -> None:
+    if path_to_file is not None:
+        with open(path_to_file) as file:
+            self.data = json.load(file)
+\end{lstlisting}
+
+
+\textit{Установка текущей конфигурации из словаря data}. Данные устанавливаются текущими значениями из словаря data:
+
+\begin{lstlisting}
+def __set_data(self) -> None:
+    if len(self.data):
+        self.alphabet = self.data["alphabet"]
+        self.word = self.data["word"]
+        self.load_rules()
+        self.states = self.get_states()
+        self.currentCondition = self.data["start_condition"]
+        self.pointer = self.data["start_pointer"]
+\end{lstlisting}
+
+
+\textit{Выполнение шага}. С помощью этой функции происходит выполнение одного шага в машине Тьюринга.
+В ней согласно текущему состоянию и символу на ленте, записывается новый символ на ленту, делается движение, а так же переход в новое состояние:
+
+\begin{lstlisting}
+def step(self) -> bool:
+    self.currentRule = self.rules.get(
+        self.currentCondition, self.rules.get(self.data["start_condition"], None)
+    )
+    symbol = self.tape[self.pointer].value
+    command = self.currentRule["commands"][symbol].split()
+
+    new_symbol, move, new_condition = command
+
+    self.tape[self.pointer].value = new_symbol
+
+    if move == "L":
+        self.pointer -= 1
+        if self.pointer < 0:
+            self.tape.push_front("_")
+            self.pointer = 0
+    elif move == "R":
+        self.pointer += 1
+        if self.pointer > self.tape.len - 1:
+            self.tape.push_back("_")
+
+    if new_condition != "!":
+        self.currentCondition = new_condition
+    else:
+        self.currentCondition = self.data.get("start_condition", "q0")
+        return False
+
+    return True
+\end{lstlisting}
+
+
+\subsubsection{GUI}
+
+Код графического интерфейса есть в ~\hyperlink{word:tmGUI}{приложении}. В нем присутствуют функции выполняющие загрузку из файла, а так же сохранение текущей конфигурации в файл. Выполнение одного шага или полное выполнение программы доступно только после загрузки конфигурации. 
+
+
+\subsubsection{Запуск}
+
+Если происходит запуск именно файла app.py (а не импорт), то код исполняется:
+
+\begin{lstlisting}
+from tmGUI import *
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    gui = TuringMachineGUI(root)
+    root.mainloop()
+\end{lstlisting}
+
+
+\section{Результат работы программы}
+
+Представлено выполнение алгоритма бинарного инкремента:
+
+\image{Images/start.jpg}{Старт программы. Загруженное слово на ленту}{fig:start}{1}
+
+\image{Images/rules.jpg}{Список правил}{fig:rules}{1}
+
+\image{Images/result.jpg}{Результат выполнения программы}{fig:result}{1}
+
+\image{Images/save.jpg}{Сохранение конфигурации}{fig:save}{1}
+
+\newpage
+
+
+\section*{Заключение}
+\addcontentsline{toc}{section}{Заключение}
+
+Процесс реализации машины Тьюринга помог полностью разобраться с её особенностями. Также применение двусвязного списка для реализации ленты побудило повторить структуры данных. 
+
+Конечную программу можно использовать для самостоятельной подготовки к семинарским занятиям по теме "Машина Тьюринга" для моделирования каких-то алгоритмов.

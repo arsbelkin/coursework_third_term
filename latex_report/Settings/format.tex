@@ -1,0 +1,103 @@
+%%%%%%%%%%%%%%%%% Оформление ГОСТА%%%%%%%%%%%%%%%%%
+
+% Все параметры указаны в ГОСТЕ на 2021, а именно:
+
+% Шрифт для курсовой Times New Roman, размер – 14 пт.
+\setdefaultlanguage[spelling=modern]{russian}
+    \setotherlanguage{english}
+    
+\setmonofont{Source Code Pro}
+\newfontfamily{\cyrillicfonttt}{Source Code Pro}
+\setmainfont{Times New Roman} 
+\setromanfont{Times New Roman} 
+\newfontfamily\cyrillicfont{Times New Roman}
+
+
+
+
+% шрифт для URL-ссылок
+\urlstyle{same} 
+
+% Междустрочный интервал должен быть равен 1.5 сантиметра.
+\linespread{1.5} % междустрочный интервал
+
+
+% Отступ для элементов списка
+\setlist{leftmargin=1.75cm}
+\setlist[itemize,2]{label=$\circ$, leftmargin=1cm}
+
+
+
+% Каждая новая строка должна начинаться с отступа равного 1.25 сантиметра.
+\setlength{\parindent}{1.25cm} % отступ для абзаца
+
+% Текст, который является основным содержанием, должен быть выровнен по ширине по умолчанию включен из-за типа документа в main.tex
+
+
+%%%%%%%%%%%%%%%%%% Дополнения %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Путь до папки с изображениями
+\graphicspath{ {./Images/} }
+
+% Внесение titlepage в учёт счётчика страниц
+\makeatletter
+\renewenvironment{titlepage} {
+	\thispagestyle{empty}
+}
+
+
+% Цвет гиперссылок и цитирования
+\usepackage{hyperref} 
+ \hypersetup{ 
+     colorlinks=true, 
+     linkcolor=black, 
+     filecolor=blue, 
+     citecolor = blue,       
+     urlcolor=blue, 
+     }
+    
+
+% Нумерация рисунков
+%\counterwithin{figure}{section}
+%\counterwithin{figure}
+
+% Нумерация таблиц
+%\counterwithin{table}
+
+%\counterwithin{table}{section}
+
+% шрифт для листингов с лигатурами
+% \setmonofont{FiraCode-Regular.otf}[
+% 	SizeFeatures={Size=10},
+% 	Path = Settings/,
+% 	Contextuals=Alternate
+% ]
+\setmonofont{Source Code Pro}
+
+% Перенос текста при переполнении
+\emergencystretch=25pt
+
+% \dottedcontents{<section>}[<left>]{<above-code>}
+% {<label width>}{<leader width>}
+\dottedcontents{section}[4em]{\bfseries}{4em}{1pc}
+\dottedcontents{subsection}[4em]{}{2.5em}{1pc}
+
+\renewcommand{\thesection}{Глава \arabic{section}}
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
+
+% настройка подсветки кода и окружения для листингов
+%\usemintedstyle{colorful} % делает подсветку для кода
+%\newenvironment{code}{\captionsetup{type=listing}}{}
+
+
+% Посмотреть ещё стили можно тут https://www.overleaf.com/learn/latex/Code_Highlighting_with_minted
+
+
+% \captionsetup[table]{
+%     justification=raggedleft,
+%     singlelinecheck=off
+% }
+
+% Замена разделителя при цитировании на (,)
+\renewcommand*{\multicitedelim}{\addcomma\space}
+
